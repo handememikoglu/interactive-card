@@ -34,6 +34,7 @@ export default function CardForm({
       cvc,
     });
 
+
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
       setErrors(fieldErrors);
@@ -43,6 +44,12 @@ export default function CardForm({
 
     setErrors({});
     console.log("Form başarıyla gönderildi!", result.data);
+  };
+
+  const handleCardNumberChange = (e) => {
+    const rawValue = e.target.value.replace(/\D/g, "").slice(0, 16);
+    const formatted = rawValue.replace(/(\d{4})(?=\d)/g, "$1 ");
+    setCardNumber(formatted);
   };
 
   return (
@@ -57,11 +64,13 @@ export default function CardForm({
           placeholder="e.g. Jane Appleseed"
           value={cardName}
           onChange={(e) => setCardName(e.target.value)}
-          className="border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className={`border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 ${
+            errors.cardName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'
+          }`}
           required
         />
         {errors.cardName && (
-          <span className="text-red-500 text-sm mt-1">{errors.cardName[0]}</span>
+          <span className="text-red-500 text-sm mt-1 ">{errors.cardName[0]}</span>
         )}
       </div>
 
@@ -71,12 +80,14 @@ export default function CardForm({
           type="text"
           placeholder="e.g. 1234 5678 9123 0000"
           value={cardNumber}
-          onChange={(e) => setCardNumber(e.target.value)}
-          className="border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onChange={handleCardNumberChange}
+          className={`border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 ${
+            errors.cardNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'
+          }`}
           required
         />
         {errors.cardNumber && (
-          <span className="text-red-500 text-sm mt-1">{errors.cardNumber[0]}</span>
+          <span className="text-red-500 text-sm mt-1 ">{errors.cardNumber[0]}</span>
         )}
       </div>
 
@@ -84,22 +95,28 @@ export default function CardForm({
         <div className="flex flex-col w-1/2">
           <label className="text-sm mb-1 text-gray-700">Exp. Date (MM/YY)</label>
           <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="MM"
-              value={expMonth}
-              onChange={(e) => setExpMonth(e.target.value)}
-              className="border text-gray-900 rounded-md p-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
-            />
-            <input
-              type="text"
-              placeholder="YY"
-              value={expYear}
-              onChange={(e) => setExpYear(e.target.value)}
-              className="border text-gray-900 rounded-md p-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
-            />
+          <input
+            type="text"
+            placeholder="MM"
+            value={expMonth}
+            onChange={(e) => setExpMonth(e.target.value)}
+            className={`border text-gray-900 rounded-md p-2 w-1/2 focus:outline-none focus:ring-2 ${
+              errors.expMonth ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'
+            }`}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="YY"
+            value={expYear}
+            onChange={(e) => setExpYear(e.target.value)}
+            className={`border text-gray-900 rounded-md p-2 w-1/2 focus:outline-none focus:ring-2 ${
+              errors.expYear ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'
+            }`}
+            required
+          />
+
           </div>
           {(errors.expMonth || errors.expYear) && (
             <span className="text-red-500 text-sm mt-1">
@@ -115,9 +132,12 @@ export default function CardForm({
             placeholder="e.g. 123"
             value={cvc}
             onChange={(e) => setCvc(e.target.value)}
-            className="border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className={`border rounded-md text-gray-900 p-2 focus:outline-none focus:ring-2 ${
+              errors.cvc ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'
+            }`}
             required
           />
+
           {errors.cvc && (
             <span className="text-red-500 text-sm mt-1">{errors.cvc[0]}</span>
           )}
