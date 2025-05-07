@@ -20,7 +20,6 @@ export default function Card({ cardName, cardNumber, expMonth, expYear, cvc }) {
         </div>
       </div>
 
-      {/* Kartın arkasında CVC gösterebiliriz, isterseniz ekleriz */}
     </div>
   );
 }
